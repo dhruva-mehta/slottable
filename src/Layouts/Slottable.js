@@ -5,27 +5,35 @@ import Block from "./Block";
 
 export default class Slottable extends React.Component {
   layoutTypeSwitch(params) {
-    switch (params.data.layout_type) {
+    switch (params.slots.data.layout_type) {
       case "2x2":
-        return <TwoByTwo slots={params.slots} />;
+        return (
+          <TwoByTwo
+            slots={params.slots.slots}
+            split={params.slots.data.isMobileSplit}
+          />
+        );
       default:
-        return "error";
+        return null;
     }
   }
 
   typeSwitch(params) {
-    switch (params[0].type) {
+    switch (params.slots.type) {
       case "layout":
-        console.log("step 1");
-        this.layoutTypeSwitch(params);
-        break;
+        return this.layoutTypeSwitch(params);
+      case "block":
+        return <Block />;
       default:
-        return "error";
+        return null;
     }
   }
 
   render() {
-    console.log(this.props);
-    return this.typeSwitch(this.props);
+    return (
+      <div style={{ border: "1px solid purple", padding: "20px" }}>
+        {this.typeSwitch(this.props)}
+      </div>
+    );
   }
 }
